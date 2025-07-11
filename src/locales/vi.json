@@ -1,0 +1,53 @@
+{
+  "auth": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "login_success": "Đăng nhập thành công",
+    "register_success": "Tạo tài khoản thành công",
+    "invalid_email": "Email không hợp lệ",
+    "password_required": "Vui lòng nhập mật khẩu",
+    "email_exists": "Email đã tồn tại",
+    "invalid_credentials": "Email hoặc mật khẩu không đúng"
+  },
+  "validation": {
+    "email": {
+      "invalid": "Email không hợp lệ",
+      "required": "Vui lòng nhập email"
+    },
+    "password": {
+      "required": "Vui lòng nhập mật khẩu",
+      "length": "Mật khẩu phải từ 6 đến 32 ký tự"
+    },
+    "firstName": {
+      "required": "Vui lòng nhập tên",
+      "string": "Tên phải là chuỗi"
+    },
+    "lastName": {
+      "required": "Vui lòng nhập họ",
+      "string": "Họ phải là chuỗi"
+    },
+    "phone": {
+      "invalid": "Số điện thoại không hợp lệ"
+    }
+  },
+  "booking": {
+    "book_now": "Đặt phòng ngay",
+    "check_in": "Ngày nhận phòng",
+    "check_out": "Ngày trả phòng",
+    "guests": "Số khách"
+  },
+  "common": {
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Sửa",
+    "loading": "Đang tải..."
+  },
+  "user": {
+    "not_found": "Không tìm thấy người dùng",
+    "update_success": "Cập nhật thông tin thành công",
+    "delete_success": "Xóa người dùng thành công"
+  }
+}

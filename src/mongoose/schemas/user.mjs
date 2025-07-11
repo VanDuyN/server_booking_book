@@ -18,15 +18,15 @@ const UserSchema = new mongoose.Schema({
     type:  mongoose.Schema.Types.String,
     required: true,
   },
-  phoneNumber: {
-    type: mongoose.Schema.Types.String,
-    required: false,
-  },
-  role: {
-    type: mongoose.Schema.Types.String,
-    enum: ["user", "admin"],
-    default: "user",
-  }      
+  // phoneNumber: {
+  //   type: mongoose.Schema.Types.String,
+  //   required: false,
+  // },
+  // role: {
+  //   type: mongoose.Schema.Types.String,
+  //   enum: ["user", "admin"],
+  //   default: "user",
+  // }      
 }); 
 const User = mongoose.model("User", UserSchema);
 export { User };
