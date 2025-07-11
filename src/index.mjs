@@ -1,60 +1,65 @@
-import express, { request } from 'express';
-import mongoose from 'mongoose';
-import usersRouter from './routers/users.mjs';
-import dotenv from 'dotenv';
-import session from 'express-session';
- // Load environment variables from .env file
-//import passport from 'passport';
+import cluster from 'cluster';
+import os from 'os';
+import app from './server.mjs';
+import connectDatabase from './config/database.mjs';
 
-
-//import {User} from './models/user.mjs'; // Adjust the path as necessary
-const app = express();
-//const mongoose = require('mongoose');
-dotenv.config(); // Load environment variables from .env file
-const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
-
-app.use(express.json()); // Middleware to parse JSON request 
-app.use(usersRouter);
-app.use(session({
-    secret: "Ruy the dev",
-    saveUninitialized: false,
-    resave: false,
-    cookie: {
-        maxAge: 1000 * 60 * 60 * 24, //
-    }
-}));
-//app.use(passport.initialize());
-//app.use(passport.session());
-const uri = process.env.MONGO_URI ;
- 
 const PORT = process.env.PORT || 3000;
+const numCPUs = os.cpus().length;
 
-async function run() {
+// Hàm khởi động server
+const startServer = async () => {
   try {
-    // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
-    await mongoose.connect(uri, clientOptions);
-    await mongoose.connection.db.admin().command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    //await mongoose.disconnect();
-  }
-}
-
-app.listen(PORT, () => {
-    //run().catch(console.dir);
-    run().then(() => {
-        console.log("Connected to MongoDB successfully");
-    }).catch(err => {
-        console.error("Failed to connect to MongoDB", err);
+    // Kết nối database trước khi khởi động server
+    await connectDatabase();
+    
+    // Khởi động server
+    const server = app.listen(PORT, () => {
+      console.log(`🚀 Server đang chạy trên cổng ${PORT} (tiến trình ${process.pid})`);
     });
-  console.log(`Server is running on port ${PORT}`);
-});
+    
+    // Xử lý tắt server một cách nhẹ nhàng
+    const gracefulShutdown = () => {
+      console.log('Nhận tín hiệu tắt server...');
+      server.close(() => {
+        console.log('Đã đóng kết nối HTTP');
+        process.exit(0);
+      });
+      
+      // Nếu server không đóng trong 10 giây, buộc tắt
+      setTimeout(() => {
+        console.error('Không thể đóng kết nối, buộc tắt!');
+        process.exit(1);
+      }, 10000);
+    };
+    
+    // Xử lý các tín hiệu tắt server
+    process.on('SIGTERM', gracefulShutdown);
+    process.on('SIGINT', gracefulShutdown);
+    
+    return server;
+  } catch (error) {
+    console.error('❌ Không thể khởi động server:', error);
+    process.exit(1);
+  }
+};
 
-app.get('/', (req, res) => {
+// Chỉ dùng cluster ở môi trường production
+const isDev = process.env.NODE_ENV !== 'production';
 
-    console.log(req.session);
-    console.log(req.session.id);
-    req.session.visited = true;
-    res.send('Hello, World!');
-});
+if (cluster.isPrimary && !isDev) {
+  console.log(`Máy chủ chính ${process.pid} đang chạy`);
+  
+  // Tạo các tiến trình con cho mỗi CPU
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+  
+  // Nếu tiến trình con bị lỗi, tạo mới
+  cluster.on('exit', (worker) => {
+    console.log(`Tiến trình ${worker.process.pid} đã dừng - đang khởi động lại`);
+    cluster.fork();
+  });
+} else {
+  // Khởi động server
+  startServer();
+}

@@ -1,0 +1,53 @@
+{
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "login_success": "Login successful",
+    "register_success": "Account created successfully",
+    "invalid_email": "Invalid email",
+    "password_required": "Please enter password",
+    "email_exists": "Email already exists",
+    "invalid_credentials": "Invalid email or password"
+  },
+  "validation": {
+    "email": {
+      "invalid": "Invalid email",
+      "required": "Email is required"
+    },
+    "password": {
+      "required": "Password is required",
+      "length": "Password must be between 6 and 32 characters"
+    },
+    "firstName": {
+      "required": "First name is required",
+      "string": "First name must be a string"
+    },
+    "lastName": {
+      "required": "Last name is required",
+      "string": "Last name must be a string"
+    },
+    "phone": {
+      "invalid": "Invalid phone number"
+    }
+  },
+  "booking": {
+    "book_now": "Book Now",
+    "check_in": "Check-in Date",
+    "check_out": "Check-out Date",
+    "guests": "Guests"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading..."
+  },
+  "user": {
+    "not_found": "User not found",
+    "update_success": "User updated successfully",
+    "delete_success": "User deleted successfully"
+  }
+}

@@ -1,68 +1,98 @@
-import e from "express";
+import { t } from './i18n.mjs';
 
-export const loginValidationSchema = {
-    email: {
-        matches: {
-            options: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/],
-            errorMessage: 'Email không hợp lệ',
-        },
+// Login schema
+export const loginValidationSchema = (lang = 'vi') => ({
+  email: {
+    isEmail: {
+      errorMessage: t('validation.email.invalid', lang),
     },
-    password: {
-        notEmpty:{
-            errorMessage: 'Vui lòng nhập mật khẩu',
-        },
-        isLength: {
-            options: { min: 6, max: 32 },
-            errorMessage: 'Tên người dùng phải từ 5 đến 100 ký tự',
-        },
+    notEmpty: {
+      errorMessage: t('validation.email.required', lang),
     },
-};
-export const createUserValidationSchema = {
-    firstName: {
-        isString: {
-            errorMessage: 'Tên phải là một chuỗi',
-        },
-        isLength: {
-            options: { min: 1, max: 30 },
-            errorMessage: 'Tên tối đa 30 ký tự',
-        },
-        notEmpty: {
-            errorMessage: 'Vui lòng nhập tên',
-        },
+  },
+  password: {
+    notEmpty: {
+      errorMessage: t('validation.password.required', lang),
+    }
+  }
+});
+
+// Create user schema
+export const createUserValidationSchema = (lang = 'vi') => ({
+  firstName: {
+    notEmpty: {
+      errorMessage: t('validation.firstName.required', lang),
     },
-    lastName: {
-        isString: {
-            errorMessage: 'Họ phải là một chuỗi',
-        },
-        notEmpty: {
-            errorMessage: 'Vui lòng nhập họ',
-        },
-        isLength: {
-            options: { min: 1, max: 30 },
-            errorMessage: 'Họ tối đa 30 ký tự',
-        },
+    isString: {
+      errorMessage: t('validation.firstName.string', lang),
+    }
+  },
+  lastName: {
+    notEmpty: {
+      errorMessage: t('validation.lastName.required', lang),
     },
-    email: {
-        isEmail: {
-            errorMessage: 'Email không hợp lệ',
-        },
-        notEmpty: {
-            errorMessage: 'Vui lòng nhập email',
-        },
+    isString: {
+      errorMessage: t('validation.lastName.string', lang),
+    }
+  },
+  email: {
+    isEmail: {
+      errorMessage: t('validation.email.invalid', lang),
     },
-    phoneNumber: {
-        matches: {
-            options: [/^\d{10}$/],
-            errorMessage: 'Số điện thoại phải từ 10 đến 15 chữ số',
-        },
+    notEmpty: {
+      errorMessage: t('validation.email.required', lang),
     },
-    password: {
-        notEmpty: {
-            errorMessage: 'Vui lòng nhập mật khẩu',
-        },
-        isLength: {
-            options: { min: 6, max: 32 },
-            errorMessage: 'Mật khẩu phải từ 6 đến 32 ký tự',
-        },
+  },
+  password: {
+    notEmpty: {
+      errorMessage: t('validation.password.required', lang),
     },
-};           
+    isLength: {
+      options: { min: 6, max: 32 },
+      errorMessage: t('validation.password.length', lang),
+    },
+  },
+  phoneNumber: {
+    optional: true,
+    matches: {
+      options: [/^\d{10,15}$/],
+      errorMessage: t('validation.phone.invalid', lang),
+    }
+  }
+});
+
+// Update user schema (không yêu cầu password)
+export const updateUserValidationSchema = (lang = 'vi') => ({
+  firstName: {
+    optional: true,
+    isString: {
+      errorMessage: t('validation.firstName.string', lang),
+    }
+  },
+  lastName: {
+    optional: true,
+    isString: {
+      errorMessage: t('validation.lastName.string', lang),
+    }
+  },
+  email: {
+    optional: true,
+    isEmail: {
+      errorMessage: t('validation.email.invalid', lang),
+    }
+  },
+  password: {
+    optional: true,
+    isLength: {
+      options: { min: 6, max: 32 },
+      errorMessage: t('validation.password.length', lang),
+    }
+  },
+  phoneNumber: {
+    optional: true,
+    matches: {
+      options: [/^\d{10,15}$/],
+      errorMessage: t('validation.phone.invalid', lang),
+    }
+  }
+});
