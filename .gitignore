@@ -6,7 +6,8 @@ yarn-error.log*
 .nyc_output/
 coverage/
 .DS_Store # macOS specific
-.env* # Environment variables
+.env* # Environment 
+.env
 
 # Build artifacts
 dist/
